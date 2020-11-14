@@ -7,18 +7,19 @@ import { useStateValue } from './StateProvider';
 function Product({ id, title, image, price, rating }) {
     // context API - data layer:
     const [state, dispatch] = useStateValue();
+
     const addToBasket = () => {
         //dispatch the item into the data layer, 
         // like a gun shoots the data into the d layer
         dispatch({
             type: "ADD_TO_BASKET",
             item: {
+                id: id,
                 title: title,
                 image: image,
                 price: price,
                 rating: rating,
             },
-            
         })
     }
 
@@ -41,7 +42,7 @@ function Product({ id, title, image, price, rating }) {
 
             <img src={image} alt="" />
 
-            <button onClick={addToBasket} >Add to Basket</button>
+            <button onClick={addToBasket}> Add to Basket</button>
         </div>
     )
 }
