@@ -23,6 +23,10 @@
   color: white;
 }
 
+.header__nav > a {
+  text-decoration: none; /*remonved the blue line*/
+}
+
 .header__nav {
   display: flex;
   justify-content: space-evenly;
