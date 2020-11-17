@@ -7,6 +7,8 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CurrencyFormat from "react-currency-format";
 import { getBasketTotal } from './reducer';
 import axios from './axios';
+import {database} from "./firebase"
+
 
 function Payment() {
     // data layer
@@ -42,6 +44,7 @@ function Payment() {
 
         getClientSecret();
     }, [basket]/*needs to create new secret key when the bakset changed*/)
+    console.log('Secret is:', clientSecret);
     // stripe payment - handle functions
     const handleSubmit = async (e) => {
         // do stripe stuff
@@ -53,9 +56,26 @@ function Payment() {
                 card: elements.getElement(CardElement)
             }
         }).then(({ paymentIntent }) => {
+            // paymentIntent = payment confirmation
+
+            database
+              .collection('users')
+              .doc(user?.uid)
+              .collection('orders')
+              .doc(paymentIntent.id)
+              .set({
+                  basket: basket,
+                  amount: paymentIntent.amount,
+                  created: paymentIntent.created
+              });
+
             setSucceeded(true);
             setError(null);
             setProcessing(false);
+
+            dispatch({
+                type: 'EMPTY_BASKET'
+            });
 
             history.replace('/orders');
         })
