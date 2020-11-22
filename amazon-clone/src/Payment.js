@@ -57,16 +57,16 @@ function Payment() {
             }
         }).then(({ paymentIntent }) => {
             // paymentIntent = payment confirmation
-
+            console.log(paymentIntent);
             database
               .collection('users')
               .doc(user?.uid)
               .collection('orders')
               .doc(paymentIntent.id)
               .set({
-                  basket: basket,
-                  amount: paymentIntent.amount,
-                  created: paymentIntent.created
+                    amount: paymentIntent.amount,
+                    basket: basket,
+                    created: paymentIntent.created
               });
 
             setSucceeded(true);
@@ -128,6 +128,7 @@ function Payment() {
                                 image={item.image}
                                 price={item.price}
                                 rating={item.rating}
+                                hideButton={false}
                             />
                         ))}
                     </div>
